@@ -1,4 +1,5 @@
 import argparse
+import os
 import time
 import random
 
@@ -19,33 +20,63 @@ def read_input(filename):
     wizards = list(wizards)
     return num_wizards, num_constraints, wizards, constraints
 
-def solve(num_wizards, num_constraints, wizards, constraints):
-    start_time = time.time()
-    end_time = start_time + RUNTIME
-    maximum_satisfied = 0
-    best_list = []
+def solve(num_wizards, num_constraints, wizards, constraints, filename):
+    base = os.path.basename(filename)
 
-    while start_time < end_time:
-        random.shuffle(wizards)
-        wizard_indices = {}
+    filenameLP = os.path.splitext(base)[0] + "_LP.py"
 
-        for i in range(num_wizards):
-            wizard_indices[wizards[i]] = i
+    with open(filenameLP, "w") as f:
+        # setting up LP script
+        f.write("from pulp import *\n\n")
+        f.write("prob = LpProblem(\"wiz\", LpMaximize)\n\n")
 
-        satisfied = num_satisfied_constraints(wizard_indices, constraints, num_constraints)
 
-        if satisfied == num_constraints:
-            print("Number of Constraints Satisfied: " + str(satisfied))
-            return wizards
-        elif satisfied > maximum_satisfied:
-            maximum_satisfied = satisfied
-            best_list = wizards[:]
+        f.write("bigM = {0}\n".format(2* num_wizards))
+        f.write("wizzies = set()\n")
+        # wizard variables
+        for wiz in wizards:
+            f.write("{0} = LpVariable(\"{0}\", 1, {1}, \"Integer\")\n".format(wiz, num_wizards))
+            f.write("wizzies.add(\"{0}\")\n".format(wiz))
 
-        start_time = time.time()
+        # objective: max0 (no maximization or min, just want to see if a solution exists)
+        f.write("\nprob += 0\n\n")
 
-    #optimize best_list
-    print("Number of Constraints Satisfied: " + str(maximum_satisfied))
-    return best_list
+        # turn wiz constraints into LP constraints
+        for i in range(num_constraints):
+            constraint = constraints[i]
+            x_1 = constraint[2]
+            x_2 = constraint[0]
+            x_3 = constraint[1]
+
+            # x_1 must be outside the age bounds of x_2, x_3
+            # e.g. constraint = x_2 x_3 x_1
+
+            # LP Helpers for constrained ordering
+            z_1 = "z{0}_1".format(i)
+            z_2 = "z{0}_2".format(i)
+            # z_3 = "z{0}_3".format(i)
+
+            f.write("{0} = LpVariable(\"{0}\", cat=\"Binary\")\n".format(z_1))
+            f.write("{0} = LpVariable(\"{0}\", cat=\"Binary\")\n".format(z_2))
+            # f.write("{0} = LpVariable(\"{0}\", cat=\"Binary\")\n".format(z_3))
+
+            # if z_1, then x_1 <= x_2; if z_2 then x_1 <= x_3
+            # to fit our constraint, z_1 must == z_2
+            f.write("prob += {0} <= {1} + bigM * {2}\n".format(x_1, x_2, z_1))
+            f.write("prob += {0} <= {1} + bigM * {2}\n".format(x_1, x_3, z_2))
+            f.write("prob += {0} == {1}\n".format(z_1, z_2))
+
+            # # z_3 = z_2 XOR z_1
+            # f.write("prob += {0} <= (1-{1}) + (1-{2})\n".format(z_3, z_1, z_2))
+            # f.write("prob += {0} >= (1-{1}) + (1-{2})\n".format(z_3, z_1, z_2))
+            # f.write("prob += {0} >= (1-{1}) + (1-{2})\n".format(z_3, z_2, z_1))
+            # f.write("prob += {0} <= 2 - (1-{1}) - (1-{2})\n".format(z_3, z_1, z_2))
+            # # z_3 = negative XOR of z_1, z_2
+            # f.write("prob += {0} == 0\n".format(z_3))
+            f.write("\n")
+
+
+    return None
 
 def num_satisfied_constraints(wizard_indices, constraints, num_constraints):
     num_satisfied = 0
@@ -73,6 +104,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     num_wizards, num_constraints, wizards, constraints = read_input(args.input_file)
-    solution = solve(num_wizards, num_constraints, wizards, constraints)
-    write_output(args.output_file, solution)
+    solution = solve(num_wizards, num_constraints, wizards, constraints, args.input_file)
+    # write_output(args.output_file, solution)
 
