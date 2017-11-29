@@ -73,7 +73,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
 
     return None
 
-def num_satisfied_constraints(constraints, num_constraints):
+def num_satisfied_constraints(wizard_indices, constraints, num_constraints):
 
     num_satisfied = 0
 
@@ -93,7 +93,7 @@ def write_output(filename, solution):
         for wizard in solution:
             f.write("{0} ".format(wizard))
 
-# python wizard_ordering.py ./inputs/inputs20/inputs20_0.in ./outputs/outputs20/outputs20_0.out
+# python wizard_ordering.py ./inputs/inputs20/input20_0.in ./outputs/outputs20/output20_0.out
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "Constraint Solver.")
     parser.add_argument("input_file", type=str, help = "___.in")
@@ -102,6 +102,6 @@ if __name__ == "__main__":
 
     num_wizards, num_constraints, wizards, constraints = read_input(args.input_file)
     solution = solve(num_wizards, num_constraints, wizards, constraints, args.input_file)
-    print(num_satisfied_constraints(constraints, num_constraints))
+    # print(num_satisfied_constraints(constraints, num_constraints))
     # write_output(args.output_file, solution)
 
