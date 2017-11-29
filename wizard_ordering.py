@@ -26,7 +26,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
         f.write("from pulp import *\n\n")
         f.write("prob = LpProblem(\"wiz\", LpMaximize)\n\n")
 
-        f.write("smallC = 0.001\n")
+        f.write("smallC = 0.05\n")
         f.write("bigM = {0}\n".format(2* num_wizards))
         f.write("wizzies = set()\n")
         # wizard variables
@@ -44,31 +44,20 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
             x_2 = constraint[0]
             x_3 = constraint[1]
 
-            # x_1 must be outside the age bounds of x_2, x_3
+            # x1 must be outside the age bounds of x2, x3
             # e.g. constraint = x_2 x_3 x_1
 
-            # LP Helpers for constrained ordering
+#           # binary helper for constrained ordering
             z_1 = "z{0}_1".format(i)
-            z_2 = "z{0}_2".format(i)
-            # z_3 = "z{0}_3".format(i)
-
             f.write("{0} = LpVariable(\"{0}\", cat=\"Binary\")\n".format(z_1))
-            f.write("{0} = LpVariable(\"{0}\", cat=\"Binary\")\n".format(z_2))
-            # f.write("{0} = LpVariable(\"{0}\", cat=\"Binary\")\n".format(z_3))
 
-            # if z_1, then x_1 <= x_2; if z_2 then x_1 <= x_3
-            # to fit our constraint, z_1 must == z_2
+            # z1 => x1 > x2 and x1 > x3
+            # !z1 => x < x2 and x1 < x3
             f.write("prob += {0} + smallC <= {1} + bigM * {2}\n".format(x_1, x_2, z_1))
-            f.write("prob += {0} + smallC <= {1} + bigM * {2}\n".format(x_1, x_3, z_2))
-            f.write("prob += {0} == {1}\n\n".format(z_1, z_2))
+            f.write("prob += {0} + smallC <= {1} + bigM * {2}\n".format(x_1, x_3, z_1))
+            f.write("prob += {0} >= smallC + {1} - (1 - {2}) * bigM\n".format(x_1, x_2, z_1))
+            f.write("prob += {0} >= smallC + {1} - (1 - {2}) * bigM\n".format(x_1, x_3, z_1))
 
-            # # z_3 = z_2 XOR z_1
-            # f.write("prob += {0} <= (1-{1}) + (1-{2})\n".format(z_3, z_1, z_2))
-            # f.write("prob += {0} >= (1-{1}) + (1-{2})\n".format(z_3, z_1, z_2))
-            # f.write("prob += {0} >= (1-{1}) + (1-{2})\n".format(z_3, z_2, z_1))
-            # f.write("prob += {0} <= 2 - (1-{1}) - (1-{2})\n".format(z_3, z_1, z_2))
-            # # z_3 = negative XOR of z_1, z_2
-            # f.write("prob += {0} == 0\n".format(z_3))
         f.write("\n")
         f.write("GLPK().solve(prob)\n")
         f.write("ages = {}\n")
@@ -85,7 +74,6 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
     return None
 
 def num_satisfied_constraints(constraints, num_constraints):
-    wizard_indices = {'Amari': 0, 'Curt': 1, 'Daragh': 2, 'Janette': 3, 'Ruben': 4, 'Skylar': 5, 'Wesley': 6, 'Dominick': 7, 'Mckenna': 8, 'Neal': 9, 'Paris': 10, 'Gene': 11, 'Carla': 12, 'Chase': 13, 'Oisin': 14, 'Lianne': 15, 'Pam': 16, 'Ayesha': 17, 'Conner': 18, 'Joni': 19}
 
     num_satisfied = 0
 
