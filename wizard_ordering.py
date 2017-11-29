@@ -1,9 +1,5 @@
 import argparse
 import os
-import time
-import random
-
-RUNTIME = 600 #seconds
 
 def read_input(filename):
     with open(filename) as f:
@@ -30,12 +26,12 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
         f.write("from pulp import *\n\n")
         f.write("prob = LpProblem(\"wiz\", LpMaximize)\n\n")
 
-
+        f.write("smallC = 0.001\n")
         f.write("bigM = {0}\n".format(2* num_wizards))
         f.write("wizzies = set()\n")
         # wizard variables
         for wiz in wizards:
-            f.write("{0} = LpVariable(\"{0}\", 1, {1}, \"Integer\")\n".format(wiz, num_wizards))
+            f.write("{0} = LpVariable(\"{0}\", 1, {1})\n".format(wiz, num_wizards))
             f.write("wizzies.add(\"{0}\")\n".format(wiz))
 
         # objective: max0 (no maximization or min, just want to see if a solution exists)
@@ -62,9 +58,9 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
 
             # if z_1, then x_1 <= x_2; if z_2 then x_1 <= x_3
             # to fit our constraint, z_1 must == z_2
-            f.write("prob += {0} <= {1} + bigM * {2}\n".format(x_1, x_2, z_1))
-            f.write("prob += {0} <= {1} + bigM * {2}\n".format(x_1, x_3, z_2))
-            f.write("prob += {0} == {1}\n".format(z_1, z_2))
+            f.write("prob += {0} + smallC <= {1} + bigM * {2}\n".format(x_1, x_2, z_1))
+            f.write("prob += {0} + smallC <= {1} + bigM * {2}\n".format(x_1, x_3, z_2))
+            f.write("prob += {0} == {1}\n\n".format(z_1, z_2))
 
             # # z_3 = z_2 XOR z_1
             # f.write("prob += {0} <= (1-{1}) + (1-{2})\n".format(z_3, z_1, z_2))
@@ -73,12 +69,24 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
             # f.write("prob += {0} <= 2 - (1-{1}) - (1-{2})\n".format(z_3, z_1, z_2))
             # # z_3 = negative XOR of z_1, z_2
             # f.write("prob += {0} == 0\n".format(z_3))
-            f.write("\n")
+        f.write("\n")
+        f.write("GLPK().solve(prob)\n")
+        f.write("ages = {}\n")
+        f.write("for v in prob.variables():\n")
+        f.write("\tif v.name in wizzies:\n")
+        f.write("\t\tprint(v.name, \"=\", v.varValue)\n")
+        f.write("\t\tages[v.name] = v.varValue\n")
+        f.write("sorted_ages = sorted(ages.items(), key = lambda x: x[1])\n")
+        f.write("relative_mapping = {}\n")
+        f.write("for i in range(len(sorted_ages)):\n")
+        f.write("\trelative_mapping[sorted_ages[i][0]] = i\n")
 
 
     return None
 
-def num_satisfied_constraints(wizard_indices, constraints, num_constraints):
+def num_satisfied_constraints(constraints, num_constraints):
+    wizard_indices = {'Ayesha': 0, 'Mckenna': 1, 'Skylar': 2, 'Ruben': 3, 'Paris': 4, 'Oisin': 5, 'Carla': 6, 'Dominick': 7, 'Gene': 8, 'Amari': 9, 'Joni': 10, 'Curt': 11, 'Wesley': 12, 'Pam': 13, 'Neal': 14, 'Conner': 15, 'Janette': 16, 'Chase': 17, 'Daragh': 18, 'Lianne': 19}
+
     num_satisfied = 0
 
     for i in range(num_constraints):
@@ -105,5 +113,6 @@ if __name__ == "__main__":
 
     num_wizards, num_constraints, wizards, constraints = read_input(args.input_file)
     solution = solve(num_wizards, num_constraints, wizards, constraints, args.input_file)
+    print(num_satisfied_constraints(constraints, num_constraints))
     # write_output(args.output_file, solution)
 

@@ -2,49 +2,49 @@ from pulp import *
 
 prob = LpProblem("wiz", LpMaximize)
 
-smallC = 0.001
+smallC = 0.005
 bigM = 40
 wizzies = set()
-Ayesha = LpVariable("Ayesha", 1, 20)
-wizzies.add("Ayesha")
-Skylar = LpVariable("Skylar", 1, 20)
-wizzies.add("Skylar")
-Lianne = LpVariable("Lianne", 1, 20)
-wizzies.add("Lianne")
 Daragh = LpVariable("Daragh", 1, 20)
 wizzies.add("Daragh")
-Carla = LpVariable("Carla", 1, 20)
-wizzies.add("Carla")
 Conner = LpVariable("Conner", 1, 20)
 wizzies.add("Conner")
 Chase = LpVariable("Chase", 1, 20)
 wizzies.add("Chase")
-Paris = LpVariable("Paris", 1, 20)
-wizzies.add("Paris")
-Mckenna = LpVariable("Mckenna", 1, 20)
-wizzies.add("Mckenna")
-Amari = LpVariable("Amari", 1, 20)
-wizzies.add("Amari")
-Janette = LpVariable("Janette", 1, 20)
-wizzies.add("Janette")
-Ruben = LpVariable("Ruben", 1, 20)
-wizzies.add("Ruben")
-Wesley = LpVariable("Wesley", 1, 20)
-wizzies.add("Wesley")
-Neal = LpVariable("Neal", 1, 20)
-wizzies.add("Neal")
-Dominick = LpVariable("Dominick", 1, 20)
-wizzies.add("Dominick")
-Curt = LpVariable("Curt", 1, 20)
-wizzies.add("Curt")
-Pam = LpVariable("Pam", 1, 20)
-wizzies.add("Pam")
-Joni = LpVariable("Joni", 1, 20)
-wizzies.add("Joni")
 Oisin = LpVariable("Oisin", 1, 20)
 wizzies.add("Oisin")
+Dominick = LpVariable("Dominick", 1, 20)
+wizzies.add("Dominick")
+Neal = LpVariable("Neal", 1, 20)
+wizzies.add("Neal")
+Skylar = LpVariable("Skylar", 1, 20)
+wizzies.add("Skylar")
+Ayesha = LpVariable("Ayesha", 1, 20)
+wizzies.add("Ayesha")
+Paris = LpVariable("Paris", 1, 20)
+wizzies.add("Paris")
+Carla = LpVariable("Carla", 1, 20)
+wizzies.add("Carla")
+Mckenna = LpVariable("Mckenna", 1, 20)
+wizzies.add("Mckenna")
+Wesley = LpVariable("Wesley", 1, 20)
+wizzies.add("Wesley")
+Curt = LpVariable("Curt", 1, 20)
+wizzies.add("Curt")
+Lianne = LpVariable("Lianne", 1, 20)
+wizzies.add("Lianne")
+Amari = LpVariable("Amari", 1, 20)
+wizzies.add("Amari")
+Ruben = LpVariable("Ruben", 1, 20)
+wizzies.add("Ruben")
+Pam = LpVariable("Pam", 1, 20)
+wizzies.add("Pam")
 Gene = LpVariable("Gene", 1, 20)
 wizzies.add("Gene")
+Janette = LpVariable("Janette", 1, 20)
+wizzies.add("Janette")
+Joni = LpVariable("Joni", 1, 20)
+wizzies.add("Joni")
 
 prob += 0
 
@@ -3051,11 +3051,8 @@ prob += z499_1 == z499_2
 
 GLPK().solve(prob)
 ages = {}
+
 for v in prob.variables():
 	if v.name in wizzies:
 		print(v.name, "=", v.varValue)
 		ages[v.name] = v.varValue
-sorted_ages = sorted(ages.items(), key = lambda x: x[1])
-relative_mapping = {}
-for i in range(len(sorted_ages)):
-	relative_mapping[sorted_ages[i][0]] = i
