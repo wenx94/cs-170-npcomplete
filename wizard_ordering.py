@@ -56,7 +56,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
             f.write("prob += {0} + smallC <= {1} + bigM * {2}\n".format(x_1, x_2, z_1))
             f.write("prob += {0} + smallC <= {1} + bigM * {2}\n".format(x_1, x_3, z_1))
             f.write("prob += {0} >= smallC + {1} - (1 - {2}) * bigM\n".format(x_1, x_2, z_1))
-            f.write("prob += {0} >= smallC + {1} - (1 - {2}) * bigM\n".format(x_1, x_3, z_1))
+            f.write("prob += {0} >= smallC + {1} - (1 - {2}) * bigM\n\n".format(x_1, x_3, z_1))
 
         f.write("\n")
         f.write("GLPK().solve(prob)\n")

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ed079d6-f9ce-48f4-afbe-2740489b08cb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input20_0_LP.py" afterPath="$PROJECT_DIR$/input20_0_LP.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wizard_ordering.py" afterPath="$PROJECT_DIR$/wizard_ordering.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +16,8 @@
       <file leaf-file-name="wizard_ordering.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wizard_ordering.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-19">
-              <caret line="77" column="21" lean-forward="false" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
+            <state relative-caret-position="481">
+              <caret line="58" column="71" lean-forward="false" selection-start-line="58" selection-start-column="71" selection-end-line="58" selection-end-column="71" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -29,12 +28,9 @@
       <file leaf-file-name="input20_0_LP.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/input20_0_LP.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="52" column="46" lean-forward="true" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
-              <folding>
-                <marker date="1511983087519" expanded="true" signature="126404:126488" ph="..." />
-                <marker date="1511983087519" expanded="true" signature="126427:126488" ph="..." />
-              </folding>
+            <state relative-caret-position="275">
+              <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -149,19 +145,16 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/input20_0_LP.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="52" column="46" lean-forward="true" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
-          <folding>
-            <marker date="1511983087519" expanded="true" signature="126404:126488" ph="..." />
-            <marker date="1511983087519" expanded="true" signature="126427:126488" ph="..." />
-          </folding>
+        <state relative-caret-position="275">
+          <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wizard_ordering.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-19">
-          <caret line="77" column="21" lean-forward="false" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
+        <state relative-caret-position="481">
+          <caret line="58" column="71" lean-forward="false" selection-start-line="58" selection-start-column="71" selection-end-line="58" selection-end-column="71" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
