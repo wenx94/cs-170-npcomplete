@@ -73,7 +73,8 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
 
     return None
 
-def num_satisfied_constraints(wizard_indices, constraints, num_constraints):
+def num_satisfied_constraints(constraints, num_constraints):
+    wizard_indices = {'Vihan': 0, 'Brooklyn': 1, 'Kirsten': 2, 'Kylee': 3, 'Kay': 4, 'Caitlyn': 5, 'Kim': 6, 'Cora': 7, 'Guillermo': 8, 'Johnny': 9, 'Jocelyn': 10, 'Carlos': 11, 'Alexis': 12, 'Cindy': 13, 'Cristian': 14, 'Sidney': 15, 'Bert': 16, 'Krista': 17, 'Janet': 18, 'Javier': 19}
 
     num_satisfied = 0
 
@@ -102,6 +103,6 @@ if __name__ == "__main__":
 
     num_wizards, num_constraints, wizards, constraints = read_input(args.input_file)
     solution = solve(num_wizards, num_constraints, wizards, constraints, args.input_file)
-    # print(num_satisfied_constraints(constraints, num_constraints))
+    print(num_satisfied_constraints(constraints, num_constraints))
     # write_output(args.output_file, solution)
 
