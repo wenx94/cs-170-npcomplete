@@ -31,7 +31,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
         f.write("wizzies = set()\n")
         # wizard variables
         for wiz in wizards:
-            f.write("{0} = LpVariable(\"{0}\", 1, {1})\n".format(wiz, num_wizards))
+            f.write("{0} = LpVariable(\"{0}\", 1, {1}, cat = \"Integer\")\n".format(wiz, num_wizards))
             f.write("wizzies.add(\"{0}\")\n".format(wiz))
 
         # objective: max0 (no maximization or min, just want to see if a solution exists)
@@ -85,7 +85,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
     return None
 
 def num_satisfied_constraints(constraints, num_constraints):
-    wizard_indices = {'Ayesha': 0, 'Mckenna': 1, 'Skylar': 2, 'Ruben': 3, 'Paris': 4, 'Oisin': 5, 'Carla': 6, 'Dominick': 7, 'Gene': 8, 'Amari': 9, 'Joni': 10, 'Curt': 11, 'Wesley': 12, 'Pam': 13, 'Neal': 14, 'Conner': 15, 'Janette': 16, 'Chase': 17, 'Daragh': 18, 'Lianne': 19}
+    wizard_indices = {'Amari': 0, 'Curt': 1, 'Daragh': 2, 'Janette': 3, 'Ruben': 4, 'Skylar': 5, 'Wesley': 6, 'Dominick': 7, 'Mckenna': 8, 'Neal': 9, 'Paris': 10, 'Gene': 11, 'Carla': 12, 'Chase': 13, 'Oisin': 14, 'Lianne': 15, 'Pam': 16, 'Ayesha': 17, 'Conner': 18, 'Joni': 19}
 
     num_satisfied = 0
 
