@@ -1,5 +1,6 @@
 import argparse
 import os
+import output_validator
 
 def read_input(filename):
     with open(filename) as f:
@@ -16,18 +17,21 @@ def read_input(filename):
     wizards = list(wizards)
     return num_wizards, num_constraints, wizards, constraints
 
-def solve(num_wizards, num_constraints, wizards, constraints, filename):
+def solve(num_wizards, num_constraints, wizards, constraints, filename, outfile):
     base = os.path.basename(filename)
 
     filenameLP = os.path.splitext(base)[0] + "_LP.py"
+    # filenameLPout = os.path.splitext(base)[0] + "_LP.out"
 
     with open(filenameLP, "w") as f:
         # setting up LP script
+        f.write("import time\n")
         f.write("from pulp import *\n\n")
         f.write("prob = LpProblem(\"wiz\", LpMaximize)\n\n")
 
+        f.write("start = time.time()\n")
         f.write("smallC = 0.05\n")
-        f.write("bigM = {0}\n".format(2* num_wizards))
+        f.write("bigM = {0}\n".format(5 + num_wizards))
         f.write("wizzies = set()\n")
         # wizard variables
         for wiz in wizards:
@@ -65,36 +69,40 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename):
         f.write("\tif v.name in wizzies:\n")
         f.write("\t\tprint(v.name, \"=\", v.varValue)\n")
         f.write("\t\tages[v.name] = v.varValue\n")
+        f.write("print(\"Time taken: {0}\".format((time.time() - start) * 1000))\n")
         f.write("sorted_ages = sorted(ages.items(), key = lambda x: x[1])\n")
-        f.write("relative_mapping = {}\n")
-        f.write("for i in range(len(sorted_ages)):\n")
-        f.write("\trelative_mapping[sorted_ages[i][0]] = i\n")
+        f.write("with open(\"{0}\", \"w\") as f:\n".format(outfile))
+        f.write("\tfor i in range({0}):\n".format(num_wizards))
+        f.write("\t\tf.write(\"{0} \".format(sorted_ages[i][0]))\n")
+        # f.write("relative_mapping = {}\n")
+        # f.write("for i in range(len(sorted_ages)):\n")
+        # f.write("\trelative_mapping[sorted_ages[i][0]] = i\n")
+    os.system("python {0}".format(filenameLP))
 
 
-    return None
 
-def num_satisfied_constraints(constraints, num_constraints):
-    wizard_indices = {'Vihan': 0, 'Brooklyn': 1, 'Kirsten': 2, 'Kylee': 3, 'Kay': 4, 'Caitlyn': 5, 'Kim': 6, 'Cora': 7, 'Guillermo': 8, 'Johnny': 9, 'Jocelyn': 10, 'Carlos': 11, 'Alexis': 12, 'Cindy': 13, 'Cristian': 14, 'Sidney': 15, 'Bert': 16, 'Krista': 17, 'Janet': 18, 'Javier': 19}
+# def num_satisfied_constraints(constraints, num_constraints):
+#     wizard_indices = {'Neal': 0, 'Conner': 1, 'Janette': 2, 'Amari': 3, 'Carla': 4, 'Curt': 5, 'Chase': 6, 'Ayesha': 7, 'Gene': 8, 'Dominick': 9, 'Joni': 10, 'Pam': 11, 'Wesley': 12, 'Mckenna': 13, 'Lianne': 14, 'Skylar': 15, 'Ruben': 16, 'Paris': 17, 'Daragh': 18, 'Oisin': 19}
+#
+#     num_satisfied = 0
+#
+#     for i in range(num_constraints):
+#         constraint = constraints[i]
+#         left_index = min(wizard_indices[constraint[0]], wizard_indices[constraint[1]])
+#         right_index = max(wizard_indices[constraint[0]], wizard_indices[constraint[1]])
+#         wiz_index = wizard_indices[constraint[2]]
+#
+#         if (wiz_index < left_index) or (wiz_index > right_index):
+#             num_satisfied += 1
+#
+#     return num_satisfied
 
-    num_satisfied = 0
+# def write_output(filename, solution):
+#     with open(filename, "w") as f:
+#         for wizard in solution:
+#             f.write("{0} ".format(wizard))
 
-    for i in range(num_constraints):
-        constraint = constraints[i]
-        left_index = min(wizard_indices[constraint[0]], wizard_indices[constraint[1]])
-        right_index = max(wizard_indices[constraint[0]], wizard_indices[constraint[1]])
-        wiz_index = wizard_indices[constraint[2]]
-
-        if (wiz_index < left_index) or (wiz_index > right_index):
-            num_satisfied += 1
-
-    return num_satisfied
-
-def write_output(filename, solution):
-    with open(filename, "w") as f:
-        for wizard in solution:
-            f.write("{0} ".format(wizard))
-
-# python wizard_ordering.py ./inputs/inputs20/input20_0.in ./outputs/outputs20/output20_0.out
+# python wizard_ordering.py ./inputs/inputs20/input20_1.in ./outputs/outputs20/output20_1.out
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "Constraint Solver.")
     parser.add_argument("input_file", type=str, help = "___.in")
@@ -102,7 +110,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     num_wizards, num_constraints, wizards, constraints = read_input(args.input_file)
-    solution = solve(num_wizards, num_constraints, wizards, constraints, args.input_file)
-    print(num_satisfied_constraints(constraints, num_constraints))
+    solve(num_wizards, num_constraints, wizards, constraints, args.input_file, args.output_file)
+    constraints_satisfied, num_constraints, constraints_failed = output_validator.processInput(args.input_file, args.output_file)
+    print("You satisfied {}/{} constraints. List of failed constraints: {}".format(constraints_satisfied, num_constraints, constraints_failed))
+    # print(num_satisfied_constraints(constraints, num_constraints))
     # write_output(args.output_file, solution)
 
