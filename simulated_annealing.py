@@ -2,6 +2,8 @@ import random
 import math
 import time
 
+# Randomization Idea: http://katrinaeg.com/simulated-annealing.html
+
 def swap_opt(wizards, mapping):
     wiz1 = random.choice(wizards)
     wiz2 = random.choice(wizards)
@@ -35,10 +37,10 @@ def anneal_opt(wizards, constraints):
     old_cost = cost_opt(mapping, constraints)
     T = 1.0
     T_min = 0.0001
-    alpha = 0.90
+    alpha = 0.92
     while T > T_min:
         i = 0
-        while i < 2000:
+        while i < 5000:
             wiz1, wiz2 = swap_opt(wizards, mapping)
             new_cost = cost_opt(mapping, constraints)
             if new_cost == 0:
