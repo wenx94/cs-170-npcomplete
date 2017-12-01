@@ -24,7 +24,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename, outfile)
 
     # used simulated annealing optimization algorithm to solve staff inputs
     if num_wizards > baseMax:
-        simulated_annealing.solve(wizards, constraints, outfile)
+        simulated_annealing.solve_opt(wizards, constraints, outfile)
     else:
         base = os.path.basename(filename)
         filenameLP = os.path.splitext(base)[0] + "_LP.py"
