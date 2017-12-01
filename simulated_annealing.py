@@ -1,22 +1,25 @@
 import random
 import math
 import copy
+import time
 
 def swap(wizards):
     neighbor = copy.deepcopy(wizards)
-    index1 = random.randomint(0, len(wizards))
-    index2 = random.randomint(0, len(wizards))
+    index1 = random.randint(0, len(wizards) - 1)
+    index2 = random.randint(0, len(wizards) - 1)
     neighbor[index1], neighbor[index2] = neighbor[index2], neighbor[index1]
     return neighbor
 
 def cost(wizards, constraints):
     failed = 0
     for c in constraints:
-        lowerBound = min(wizards.index(c[0]), c[1])
-        upperBound = max(wizards.index(c[0]), c[1])
+        wiz1 = wizards.index(c[0])
+        wiz2 = wizards.index(c[1])
+        lowerBound = min(wiz1, wiz2)
+        upperBound = max(wiz1, wiz2)
         if (lowerBound < wizards.index(c[2]) < upperBound):
             failed += 1
-    return len(constraints) - failed
+    return failed
 
 def acceptance_probability(old_cost, new_cost, T):
     if new_cost < old_cost:
@@ -24,6 +27,10 @@ def acceptance_probability(old_cost, new_cost, T):
     else:
         return math.exp((old_cost - new_cost) / T)
 
+
+    # 
+    # output_ordering_set = set(output_ordering)
+    # output_ordering_map = {k: v for v, k in enumerate(output_ordering)}
 def anneal(wizards, constraints):
     random.shuffle(wizards)
     curr = wizards
@@ -33,10 +40,11 @@ def anneal(wizards, constraints):
     alpha = 0.90
     while T > T_min:
         i = 0
-        while i < 1000:
+        while i < 2000:
             neighbor = swap(curr)
             new_cost = cost(neighbor, constraints)
             if new_cost == 0:
+                print("Found!")
                 return neighbor
             ap = acceptance_probability(old_cost, new_cost, T)
             if ap > random.random():
@@ -48,8 +56,10 @@ def anneal(wizards, constraints):
 
 
 def solve(wizards, constraints, filename):
+    start = time.time()
     solution = anneal(wizards, constraints)
     write_output(filename, solution)
+    print("Time taken: {0}".format(time.time() - start))
 
 
 def write_output(filename, solution):
