@@ -64,7 +64,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename, outfile)
 
         f.write("\n")
         # f.write("GLPK().solve(prob)\n")
-        f.write("prob.solve(pulp.PULP_CBC_CMD())\n")
+        f.write("prob.solve(pulp.GUROBI_CMD())\n")
         f.write("ages = {}\n")
         f.write("for v in prob.variables():\n")
         f.write("\tif v.name in wizzies:\n")
@@ -80,7 +80,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, filename, outfile)
     os.remove(filenameLP)
 
 
-# python wizard_ordering.py ./inputs/inputs20/input20_1.in ./outputs/outputs20/output20_1.out
+# python wizard_ordering.py ./inputs/inputs20/input20_0.in ./outputs/outputs20/output20_0.out
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "Constraint Solver.")
     parser.add_argument("input_file", type=str, help = "___.in")
