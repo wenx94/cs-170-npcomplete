@@ -3,7 +3,7 @@ import os
 import output_validator
 import simulated_annealing
 
-baseMax = 50
+staffMin = 160
 
 def read_input(filename):
     with open(filename) as f:
@@ -23,7 +23,7 @@ def read_input(filename):
 def solve(num_wizards, num_constraints, wizards, constraints, filename, outfile):
 
     # used simulated annealing optimization algorithm to solve staff inputs
-    if num_wizards > baseMax:
+    if num_wizards >= staffMin:
         simulated_annealing.solve_opt(wizards, constraints, outfile)
     else:
         base = os.path.basename(filename)
