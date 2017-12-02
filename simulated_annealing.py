@@ -37,10 +37,10 @@ def anneal_opt(wizards, constraints):
     old_cost = cost_opt(mapping, constraints)
     T = 1.0
     T_min = 0.0001
-    alpha = 0.94 # increase to improve probability of satisfying all constraints
+    alpha = 0.95 # increase to improve probability of satisfying all constraints
     while T > T_min:
         i = 0
-        while i < 7000: # increase to improve probability of satisfying all constraints
+        while i < 8000: # increase to improve probability of satisfying all constraints
             wiz1, wiz2 = swap_opt(wizards, mapping)
             new_cost = cost_opt(mapping, constraints)
             if new_cost == 0:
